@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.application.port.in.CreateTaskUseCase;
+import com.example.application.port.in.DeleteTaskUseCase;
 import com.example.application.port.in.GetTaskUseCase;
 import com.example.application.port.in.ListTaskUseCase;
 import com.example.application.port.out.TaskRepositoryPort;
@@ -33,7 +34,7 @@ import lombok.RequiredArgsConstructor;
  * hay que crear cuando se levanta el contexto de Spring
  * 
  * */
-public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskUseCase {
+public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskUseCase, DeleteTaskUseCase {
 
 	private final TaskRepositoryPort taskRepositoryPort;
 	
@@ -54,6 +55,14 @@ public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskU
 	public List<Task> listAll() {
 		// TODO Auto-generated method stub
 		return taskRepositoryPort.findAll();
+	}
+
+	@Override
+	public void deleteById(long id) {
+		if (!taskRepositoryPort.findById(id).isPresent()) {
+			throw new TaskNotFoundException(id);
+		}
+		taskRepositoryPort.deleteById(id);
 	}
 
 }

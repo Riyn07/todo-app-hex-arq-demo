@@ -41,4 +41,9 @@ public class JpaTaskRepositoryAdapter implements TaskRepositoryPort {
 				.map(taskPersistenceMapper::toDomain)
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public void deleteById(long id) {
+		springDataTaskRepository.deleteById(id);
+	}
 }
