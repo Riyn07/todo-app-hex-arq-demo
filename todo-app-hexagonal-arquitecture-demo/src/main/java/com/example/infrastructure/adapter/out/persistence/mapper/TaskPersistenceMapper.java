@@ -9,7 +9,6 @@ import com.example.infrastructure.adapter.out.persistence.TaskJpaEntity;
 @Mapper(componentModel = "spring")
 public interface TaskPersistenceMapper {
 
-    @Mapping(target = "createdAt", ignore = true)
     TaskJpaEntity toJpaEntity(Task task);
 
     Task toDomain(TaskJpaEntity entity);
