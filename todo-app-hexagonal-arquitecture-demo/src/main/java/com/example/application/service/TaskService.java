@@ -9,6 +9,7 @@ import com.example.application.port.in.CreateTaskUseCase;
 import com.example.application.port.in.DeleteTaskUseCase;
 import com.example.application.port.in.GetTaskUseCase;
 import com.example.application.port.in.ListTaskUseCase;
+import com.example.application.port.in.UpdateTaskUseCase;
 import com.example.application.port.out.TaskRepositoryPort;
 import com.example.domain.exception.TaskNotFoundException;
 import com.example.domain.model.Task;
@@ -34,7 +35,7 @@ import lombok.RequiredArgsConstructor;
  * hay que crear cuando se levanta el contexto de Spring
  * 
  * */
-public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskUseCase, DeleteTaskUseCase {
+public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskUseCase, DeleteTaskUseCase, UpdateTaskUseCase {
 
 	private final TaskRepositoryPort taskRepositoryPort;
 	
@@ -63,6 +64,17 @@ public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskU
 			throw new TaskNotFoundException(id);
 		}
 		taskRepositoryPort.deleteById(id);
+	}
+
+	@Override
+	public Task update(long id, Task task) {
+		Task existing = taskRepositoryPort.findById(id)
+				.orElseThrow(() -> new TaskNotFoundException(id));
+
+		existing.setTitle(task.getTitle());
+		existing.setDescription(task.getDescription());
+
+		return taskRepositoryPort.save(existing);
 	}
 
 }
