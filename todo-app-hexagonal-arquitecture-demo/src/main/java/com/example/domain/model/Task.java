@@ -25,6 +25,7 @@ public class Task {
 	private TaskStatus status;
 	private LocalDateTime createdAt;
 	private LocalDateTime completedAt;
+	private String imagePath;
 	
 	/* Los metodos siguientes aportan comportamiento, es decir, las reglas de negocio para la gestion 
 	 * de las tareas*/

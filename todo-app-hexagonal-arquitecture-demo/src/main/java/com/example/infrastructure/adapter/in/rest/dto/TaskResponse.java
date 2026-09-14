@@ -19,4 +19,5 @@ public class TaskResponse {
 	private TaskStatus status;
 	private LocalDateTime createdAt;
 	private LocalDateTime completedAt;
+	private String imagePath;
 }

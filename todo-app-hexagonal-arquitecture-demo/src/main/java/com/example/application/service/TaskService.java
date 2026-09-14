@@ -10,6 +10,7 @@ import com.example.application.port.in.DeleteTaskUseCase;
 import com.example.application.port.in.GetTaskUseCase;
 import com.example.application.port.in.ListTaskUseCase;
 import com.example.application.port.in.UpdateTaskUseCase;
+import com.example.application.port.in.UploadTaskImageUseCase;
 import com.example.application.port.out.TaskRepositoryPort;
 import com.example.domain.exception.TaskNotFoundException;
 import com.example.domain.model.Task;
@@ -35,7 +36,7 @@ import lombok.RequiredArgsConstructor;
  * hay que crear cuando se levanta el contexto de Spring
  * 
  * */
-public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskUseCase, DeleteTaskUseCase, UpdateTaskUseCase {
+public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskUseCase, DeleteTaskUseCase, UpdateTaskUseCase, UploadTaskImageUseCase {
 
 	private final TaskRepositoryPort taskRepositoryPort;
 	
@@ -73,6 +74,16 @@ public class TaskService implements CreateTaskUseCase, GetTaskUseCase, ListTaskU
 
 		existing.setTitle(task.getTitle());
 		existing.setDescription(task.getDescription());
+
+		return taskRepositoryPort.save(existing);
+	}
+
+	@Override
+	public Task uploadImage(long id, String imagePath) {
+		Task existing = taskRepositoryPort.findById(id)
+				.orElseThrow(() -> new TaskNotFoundException(id));
+
+		existing.setImagePath(imagePath);
 
 		return taskRepositoryPort.save(existing);
 	}

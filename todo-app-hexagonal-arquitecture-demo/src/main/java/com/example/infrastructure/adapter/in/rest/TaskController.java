@@ -12,17 +12,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.application.port.in.CreateTaskUseCase;
 import com.example.application.port.in.DeleteTaskUseCase;
 import com.example.application.port.in.GetTaskUseCase;
 import com.example.application.port.in.ListTaskUseCase;
 import com.example.application.port.in.UpdateTaskUseCase;
+import com.example.application.port.in.UploadTaskImageUseCase;
 import com.example.domain.model.Task;
 import com.example.infrastructure.adapter.in.rest.dto.CreateTaskRequest;
 import com.example.infrastructure.adapter.in.rest.dto.TaskResponse;
 import com.example.infrastructure.adapter.in.rest.mapper.TaskRestMapper;
+import com.example.infrastructure.adapter.in.rest.service.ImageStorageService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +41,9 @@ public class TaskController {
 	private final ListTaskUseCase listTaskUseCase;
 	private final DeleteTaskUseCase deleteTaskUseCase;
 	private final UpdateTaskUseCase updateTaskUseCase;
+	private final UploadTaskImageUseCase uploadTaskImageUseCase;
 	private final TaskRestMapper taskRestMapper;
+	private final ImageStorageService imageStorageService;
 
 	@PostMapping
 	public ResponseEntity<TaskResponse> create(@Valid @RequestBody CreateTaskRequest request) {
@@ -80,6 +86,16 @@ public class TaskController {
 
 		Task task = taskRestMapper.toDomain(request);
 		Task updated = updateTaskUseCase.update(id, task);
+
+		return ResponseEntity.ok(taskRestMapper.toResponse(updated));
+	}
+
+	@PostMapping("/{id}/image")
+	public ResponseEntity<TaskResponse> uploadImage(@PathVariable long id,
+			@RequestParam("image") MultipartFile file) {
+
+		String imagePath = imageStorageService.store(file, id);
+		Task updated = uploadTaskImageUseCase.uploadImage(id, imagePath);
 
 		return ResponseEntity.ok(taskRestMapper.toResponse(updated));
 	}
