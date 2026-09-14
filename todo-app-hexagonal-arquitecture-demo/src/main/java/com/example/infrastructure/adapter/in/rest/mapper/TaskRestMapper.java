@@ -14,6 +14,7 @@ public interface TaskRestMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "completedAt", ignore = true)
+    @Mapping(target = "imagePath", ignore = true)
     Task toDomain(CreateTaskRequest request);
 
     TaskResponse toResponse(Task task);
