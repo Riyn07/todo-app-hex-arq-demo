@@ -18,6 +18,7 @@ import com.example.application.port.in.ListTaskUseCase;
 import com.example.domain.model.Task;
 import com.example.infrastructure.adapter.in.rest.dto.CreateTaskRequest;
 import com.example.infrastructure.adapter.in.rest.dto.TaskResponse;
+import com.example.infrastructure.adapter.in.rest.mapper.TaskRestMapper;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,48 +31,33 @@ public class TaskController {
 	private final CreateTaskUseCase createTaskUseCase;
 	private final GetTaskUseCase getTaskUseCase;
 	private final ListTaskUseCase listTaskUseCase;
-	
+	private final TaskRestMapper taskRestMapper;
+
 	@PostMapping
 	public ResponseEntity<TaskResponse> create(@Valid @RequestBody CreateTaskRequest request) {
-		
-		Task task = Task.builder()
-				.title(request.getTitle())
-				.description(request.getDescription())
-				.build();
-		
+
+		Task task = taskRestMapper.toDomain(request);
 		Task saved = createTaskUseCase.create(task);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(TaskResponse.from(saved));
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(taskRestMapper.toResponse(saved));
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<TaskResponse> getById(@PathVariable long id) {
-		
+
 		Task task = getTaskUseCase.getById(id);
-		
-		return ResponseEntity.ok(TaskResponse.from(task));
+
+		return ResponseEntity.ok(taskRestMapper.toResponse(task));
 	}
-	
-	@GetMapping	
+
+	@GetMapping
 	public ResponseEntity<List<TaskResponse>> listAll() {
-		
+
 		List<TaskResponse> response = listTaskUseCase.listAll()
 				.stream()
-				.map(TaskResponse::from)
+				.map(taskRestMapper::toResponse)
 				.collect(Collectors.toList());
-		
+
 		return ResponseEntity.ok(response);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
