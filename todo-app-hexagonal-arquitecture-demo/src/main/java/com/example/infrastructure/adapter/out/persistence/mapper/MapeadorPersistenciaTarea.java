@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import com.example.domain.model.Tarea;
 import com.example.infrastructure.adapter.out.persistence.EntidadTareaJpa;
 
+
 @Mapper(componentModel = "spring")
 public interface MapeadorPersistenciaTarea {
 
