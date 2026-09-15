@@ -1,5 +1,5 @@
 package com.example.domain.model;
 
-public enum TaskStatus {
+public enum EstadoTarea {
 	PENDING, COMPLETED
 }

@@ -2,7 +2,7 @@ package com.example.infrastructure.adapter.out.persistence;
 
 import java.time.LocalDateTime;
 
-import com.example.domain.model.TaskStatus;
+import com.example.domain.model.EstadoTarea;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class TaskJpaEntity {
+public class EntidadTareaJpa {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,22 +40,19 @@ public class TaskJpaEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 20)
-	private TaskStatus status;
+	private EstadoTarea status;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
 	@Column(name = "completed_at")
 	private LocalDateTime completedAt;
-
-	@Column(name = "image_path")
-	private String imagePath;
 	
 	@PrePersist
 	public void prePersist() {
 		this.createdAt = LocalDateTime.now();
 		
 		if (this.status == null)
-			this.status = TaskStatus.PENDING;
+			this.status = EstadoTarea.PENDING;
 	}
 }

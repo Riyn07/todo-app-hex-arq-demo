@@ -1,7 +1,6 @@
 package com.example.infrastructure.adapter.in.rest;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -9,13 +8,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.domain.exception.TaskNotFoundException;
+import com.example.domain.exception.TareaNoEncontradaException;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class ManejadorErroresGlobal {
 	
-	@ExceptionHandler(TaskNotFoundException.class)
-	public ProblemDetail handleTaskNotFoundException(TaskNotFoundException ex) {
+	@ExceptionHandler(TareaNoEncontradaException.class)
+	public ProblemDetail handleTareaNoEncontrada(TareaNoEncontradaException ex) {
 		
 		@SuppressWarnings("null")
 		ProblemDetail problem = ProblemDetail.forStatusAndDetail(
@@ -48,6 +47,3 @@ public class GlobalExceptionHandler {
 		
 	}
 }
-
-
-

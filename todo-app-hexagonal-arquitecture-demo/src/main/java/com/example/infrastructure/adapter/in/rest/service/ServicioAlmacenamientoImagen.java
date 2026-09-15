@@ -10,10 +10,8 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.domain.exception.TaskNotFoundException;
-
 @Service
-public class ImageStorageService {
+public class ServicioAlmacenamientoImagen {
 
 	private static final String UPLOAD_DIR = "uploads/";
 
